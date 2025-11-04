@@ -2,6 +2,7 @@ package ing.Digital.Wallet.wallet.controller.request;
 
 import ing.Digital.Wallet.currency.jpa.model.CurrencyCode;
 import ing.Digital.Wallet.wallet.service.model.WalletCreate;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

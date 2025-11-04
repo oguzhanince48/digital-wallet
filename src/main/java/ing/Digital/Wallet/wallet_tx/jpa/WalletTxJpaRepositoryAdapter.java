@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -27,6 +28,7 @@ public class WalletTxJpaRepositoryAdapter {
 
     public WalletTx save(WalletTxInfo walletTxInfo){
         WalletTxEntity walletTxEntity = new WalletTxEntity();
+        walletTxEntity.setCreatedDate(LocalDateTime.now());
         walletTxEntity.setAmount(walletTxInfo.getAmount());
         walletTxEntity.setWalletId(walletTxInfo.getWalletId());
         walletTxEntity.setOppositePartyType(walletTxInfo.getOppositePartyType());
@@ -45,6 +47,7 @@ public class WalletTxJpaRepositoryAdapter {
         WalletTxEntity walletTxEntity = walletTxJpaRepository.findById(walletTx.getId())
                 .orElseThrow(() -> new RuntimeException("WalletTx not found"));
         walletTxEntity.setOppositePartyStatus(walletTx.getOppositePartyStatus());
+        walletTxEntity.setUpdatedDate(LocalDateTime.now());
         return walletTxJpaRepository.save(walletTxEntity).toModel();
     }
 

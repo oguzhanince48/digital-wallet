@@ -11,4 +11,5 @@ public class BalanceChange {
     private BigDecimal amount;
     private BigDecimal usableBalanceAmount;
     private Long walletId;
+    private Long customerId;
 }

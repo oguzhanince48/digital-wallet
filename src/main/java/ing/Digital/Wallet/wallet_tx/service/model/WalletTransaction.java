@@ -7,10 +7,10 @@ import java.math.BigDecimal;
 
 @Data
 @Builder
-public class WalletDeposit {
+public class WalletTransaction {
     private BigDecimal amount;
     private Long walletId;
     private OppositePartyType oppositePartyType;
-    private OppositePartyStatus oppositePartyStatus;
     private TransactionType transactionType;
+    private Long customerId;
 }

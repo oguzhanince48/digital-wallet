@@ -21,11 +21,12 @@ public class WalletTxSearchRequest {
 
     private Long walletId;
 
-    public WalletTxSearch toModel() {
+    public WalletTxSearch toModel(Long customerId) {
         return WalletTxSearch.builder()
                 .page(page)
                 .size(0)
                 .walletId(walletId)
+                .customerId(customerId)
                 .build();
     }
 }

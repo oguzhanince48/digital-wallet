@@ -26,6 +26,9 @@ public class WalletTxEntity extends AbstractEntity {
 
     public WalletTx toModel() {
         return WalletTx.builder()
+                .id(getId())
+                .createdDate(getCreatedDate())
+                .updatedDate(getUpdatedDate())
                 .amount(amount)
                 .walletId(walletId)
                 .oppositePartyType(oppositePartyType)

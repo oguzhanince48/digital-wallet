@@ -2,6 +2,7 @@ package ing.Digital.Wallet.wallet_tx.controller.request;
 
 import ing.Digital.Wallet.wallet_tx.service.model.OppositePartyType;
 import ing.Digital.Wallet.wallet_tx.service.model.TransactionType;
+import ing.Digital.Wallet.wallet_tx.service.model.WalletTransaction;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletWithdraw;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,14 +18,15 @@ import java.math.BigDecimal;
 public class WalletWithdrawRequest {
     private BigDecimal amount;
     private Long walletId;
-    private OppositePartyType destination;
+    private OppositePartyType oppositePartyType;
 
-    public WalletWithdraw toModel() {
-        return WalletWithdraw.builder()
+    public WalletTransaction toModel(Long customerId) {
+        return WalletTransaction.builder()
                 .amount(amount)
                 .walletId(walletId)
-                .destination(destination)
+                .oppositePartyType(oppositePartyType)
                 .transactionType(TransactionType.WITHDRAW)
+                .customerId(customerId)
                 .build();
     }
 }

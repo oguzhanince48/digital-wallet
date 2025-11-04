@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,22 +29,22 @@ public class WalletTxController extends BaseController {
     private final WalletTxService walletTxService;
 
     @GetMapping
-    public Response<DataResponse<WalletTxSearchResponse>> search(@Valid WalletTxSearchRequest walletTxSearchRequest) {
-        WalletTxSearchResult walletTxSearchResult = walletTxService.search(walletTxSearchRequest.toModel());
+    public Response<DataResponse<WalletTxSearchResponse>> search(@Valid WalletTxSearchRequest walletTxSearchRequest, @RequestHeader ("customerId") Long customerId) {
+        WalletTxSearchResult walletTxSearchResult = walletTxService.search(walletTxSearchRequest.toModel(customerId));
         return respond(walletTxSearchResult.getWalletTxList().stream()
                 .map(WalletTxSearchResponse::fromModel)
                 .toList(), walletTxSearchResult.getPage(), walletTxSearchResult.getSize(), walletTxSearchResult.getTotalCount());
     }
 
     @PostMapping("/deposit")
-    public Response<WalletTx> deposit(@Valid @RequestBody WalletDepositRequest walletDepositRequest) {
-        WalletTx walletTx = walletTxService.deposit(walletDepositRequest.toModel());
+    public Response<WalletTx> deposit(@Valid @RequestBody WalletDepositRequest walletDepositRequest, @RequestHeader ("customerId") Long customerId) {
+        WalletTx walletTx = walletTxService.deposit(walletDepositRequest.toModel(customerId));
         return respond(walletTx);
     }
 
     @PostMapping("/withdraw")
-    public Response<WalletTx> deposit(@Valid @RequestBody WalletWithdrawRequest walletWithdrawRequest) {
-        WalletTx walletTx = walletTxService.withdraw(walletWithdrawRequest.toModel());
+    public Response<WalletTx> deposit(@Valid @RequestBody WalletWithdrawRequest walletWithdrawRequest, @RequestHeader ("customerId") Long customerId) {
+        WalletTx walletTx = walletTxService.withdraw(walletWithdrawRequest.toModel(customerId));
         return respond(walletTx);
     }
 

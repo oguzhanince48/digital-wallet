@@ -2,7 +2,7 @@ package ing.Digital.Wallet.wallet_tx.controller.request;
 
 import ing.Digital.Wallet.wallet_tx.service.model.OppositePartyType;
 import ing.Digital.Wallet.wallet_tx.service.model.TransactionType;
-import ing.Digital.Wallet.wallet_tx.service.model.WalletDeposit;
+import ing.Digital.Wallet.wallet_tx.service.model.WalletTransaction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,12 +19,13 @@ public class WalletDepositRequest {
     private Long walletId;
     private OppositePartyType oppositePartyType;
 
-    public WalletDeposit toModel() {
-        return WalletDeposit.builder()
+    public WalletTransaction toModel(Long customerId) {
+        return WalletTransaction.builder()
                 .amount(amount)
                 .walletId(walletId)
                 .oppositePartyType(oppositePartyType)
                 .transactionType(TransactionType.DEPOSIT)
+                .customerId(customerId)
                 .build();
     }
 }

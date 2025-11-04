@@ -1,11 +1,12 @@
 package ing.Digital.Wallet.wallet_tx.service;
 
+import ing.Digital.Wallet.common.configuration.WalletConfiguration;
 import ing.Digital.Wallet.wallet.jpa.WalletJpaRepositoryAdapter;
 import ing.Digital.Wallet.wallet.service.model.BalanceChange;
-import ing.Digital.Wallet.wallet.service.model.Wallet;
 import ing.Digital.Wallet.wallet_tx.jpa.WalletTxJpaRepositoryAdapter;
 import ing.Digital.Wallet.wallet_tx.service.model.OppositePartyStatus;
-import ing.Digital.Wallet.wallet_tx.service.model.WalletDeposit;
+import ing.Digital.Wallet.wallet_tx.service.model.TransactionType;
+import ing.Digital.Wallet.wallet_tx.service.model.WalletTransaction;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTx;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTxInfo;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTxSearch;
@@ -25,8 +26,7 @@ public class WalletTxService {
 
     private final WalletTxJpaRepositoryAdapter walletTxJpaRepositoryAdapter;
     private final WalletJpaRepositoryAdapter walletJpaRepositoryAdapter;
-
-    private static final BigDecimal TX_THRESHOLD = BigDecimal.valueOf(1000);
+    private final WalletConfiguration walletConfiguration;
 
     @Transactional(readOnly = true)
     public WalletTxSearchResult search(WalletTxSearch walletTxSearch) {
@@ -34,54 +34,64 @@ public class WalletTxService {
     }
 
     @Transactional
-    public WalletTx deposit(WalletDeposit walletDeposit){
-        OppositePartyStatus oppositePartyStatus = decideOppositePartyStatus(walletDeposit.getAmount());
-        BalanceChange balanceChange = BalanceChange.builder()
-                .walletId(walletDeposit.getWalletId())
-                .amount(walletDeposit.getAmount())
-                .usableBalanceAmount(OppositePartyStatus.APPROVED.equals(oppositePartyStatus) ? walletDeposit.getAmount() : BigDecimal.ZERO)
-                .build();
-
-        Wallet wallet = walletJpaRepositoryAdapter.upsertBalance(balanceChange);
-
-        WalletTxInfo walletTxInfo = WalletTxInfo.builder()
-                .walletId(walletDeposit.getWalletId())
-                .amount(walletDeposit.getAmount())
-                .oppositePartyType(walletDeposit.getOppositePartyType())
-                .oppositePartyStatus(oppositePartyStatus)
-                .transactionType(walletDeposit.getTransactionType())
-                .build();
+    public WalletTx deposit(WalletTransaction walletTransaction){
+        OppositePartyStatus oppositePartyStatus = decideOppositePartyStatus(walletTransaction.getAmount());
+        BalanceChange balanceChange = buildBalanceChange(walletTransaction,oppositePartyStatus);
+        walletJpaRepositoryAdapter.upsertBalance(balanceChange);
+        WalletTxInfo walletTxInfo = buildWalletTxInfo(walletTransaction,oppositePartyStatus);
         return walletTxJpaRepositoryAdapter.save(walletTxInfo);
     }
 
     @Transactional
-    public WalletTx withdraw(WalletWithdraw walletWithdraw){
-        OppositePartyStatus oppositePartyStatus = decideOppositePartyStatus(walletWithdraw.getAmount());
-        BalanceChange balanceChange = BalanceChange.builder()
-                .walletId(walletWithdraw.getWalletId())
-                .amount(walletWithdraw.getAmount().negate())
-                .usableBalanceAmount(OppositePartyStatus.APPROVED.equals(oppositePartyStatus) ? walletWithdraw.getAmount().negate() : BigDecimal.ZERO)
-                .build();
-
+    public WalletTx withdraw(WalletTransaction walletTransaction){
+        // TODO add balance check before withdraw
+        OppositePartyStatus oppositePartyStatus = decideOppositePartyStatus(walletTransaction.getAmount());
+        BalanceChange balanceChange = buildBalanceChange(walletTransaction,oppositePartyStatus);
         walletJpaRepositoryAdapter.upsertBalance(balanceChange);
+        WalletTxInfo walletTxInfo = buildWalletTxInfo(walletTransaction,oppositePartyStatus);
 
-        WalletTxInfo walletTxInfo = WalletTxInfo.builder()
-                .walletId(walletWithdraw.getWalletId())
-                .amount(walletWithdraw.getAmount())
-                .oppositePartyType(walletWithdraw.getDestination())
-                .oppositePartyStatus(oppositePartyStatus)
-                .transactionType(walletWithdraw.getTransactionType())
-                .build();
+        //add current balance with reusable balance to walletTxInfo
         return walletTxJpaRepositoryAdapter.save(walletTxInfo);
     }
 
-
     private OppositePartyStatus decideOppositePartyStatus(BigDecimal amount){
-        if(TX_THRESHOLD.compareTo(amount) > 0) {
+        if(walletConfiguration.getLimit().compareTo(amount) > 0) {
             return OppositePartyStatus.APPROVED;
         }
         else {
             return OppositePartyStatus.PENDING;
         }
+    }
+
+    private BalanceChange buildBalanceChange(WalletTransaction walletTransaction,OppositePartyStatus oppositePartyStatus){
+        switch (walletTransaction.getTransactionType()){
+            case DEPOSIT -> {
+                return BalanceChange.builder()
+                        .walletId(walletTransaction.getWalletId())
+                        .amount(walletTransaction.getAmount())
+                        .usableBalanceAmount(OppositePartyStatus.APPROVED.equals(oppositePartyStatus) ? walletTransaction.getAmount() : BigDecimal.ZERO)
+                        .customerId(walletTransaction.getCustomerId())
+                        .build();
+            }
+            case WITHDRAW -> {
+                return BalanceChange.builder()
+                        .walletId(walletTransaction.getWalletId())
+                        .amount(walletTransaction.getAmount().negate())
+                        .usableBalanceAmount(OppositePartyStatus.APPROVED.equals(oppositePartyStatus) ? walletTransaction.getAmount().negate() : BigDecimal.ZERO)
+                        .customerId(walletTransaction.getCustomerId())
+                        .build();
+        }
+            default -> throw new IllegalArgumentException("Unsupported transaction type: " + walletTransaction.getTransactionType());
+        }
+    }
+
+    private WalletTxInfo buildWalletTxInfo(WalletTransaction walletTransaction,OppositePartyStatus oppositePartyStatus){
+        return WalletTxInfo.builder()
+                .walletId(walletTransaction.getWalletId())
+                .amount(walletTransaction.getAmount())
+                .oppositePartyType(walletTransaction.getOppositePartyType())
+                .oppositePartyStatus(oppositePartyStatus)
+                .transactionType(walletTransaction.getTransactionType())
+                .build();
     }
 }

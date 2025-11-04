@@ -13,4 +13,6 @@ public class WalletWithdraw {
     private OppositePartyType destination;
     private OppositePartyStatus oppositePartyStatus;
     private TransactionType transactionType;
+    private OppositePartyType oppositePartyType;
+    private Long customerId;
 }

@@ -9,4 +9,5 @@ public class WalletTxSearch {
     private Integer page;
     private Integer size;
     private Long walletId;
+    private Long customerId;
 }

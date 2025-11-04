@@ -1,0 +1,11 @@
+package ing.Digital.Wallet.customer.jpa.repository;
+
+import ing.Digital.Wallet.customer.jpa.entity.CustomerEntity;
+import ing.Digital.Wallet.customer.service.model.Customer;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface CustomerJpaRepository extends JpaRepository<CustomerEntity,Long> {
+
+}

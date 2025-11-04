@@ -3,7 +3,6 @@ package ing.Digital.Wallet.customer.jpa.repository;
 import ing.Digital.Wallet.customer.jpa.entity.CustomerEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 @Repository

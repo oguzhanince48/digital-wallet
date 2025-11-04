@@ -1,6 +1,5 @@
 package ing.Digital.Wallet.wallet_tx.service.model;
 
-import ing.Digital.Wallet.wallet.service.model.Wallet;
 import lombok.Builder;
 import lombok.Data;
 

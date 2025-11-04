@@ -1,9 +1,5 @@
 package ing.Digital.Wallet.wallet_tx.service.model;
 
-import lombok.Builder;
-import lombok.Data;
-
-
 public enum TransactionType {
     DEPOSIT(1),
     WITHDRAW(2);

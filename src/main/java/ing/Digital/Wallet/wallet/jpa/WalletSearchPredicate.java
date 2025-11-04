@@ -1,8 +1,6 @@
 package ing.Digital.Wallet.wallet.jpa;
 
-import ch.qos.logback.core.util.StringUtil;
 import ing.Digital.Wallet.currency.jpa.entity.CurrencyEntity;
-import ing.Digital.Wallet.currency.jpa.model.CurrencyCode;
 import ing.Digital.Wallet.customer.jpa.entity.CustomerEntity;
 import ing.Digital.Wallet.wallet.jpa.entity.WalletEntity;
 import io.micrometer.common.util.StringUtils;
@@ -29,6 +27,7 @@ class WalletSearchPredicate {
         this.criteriaBuilder = criteriaBuilder;
         this.customerEntityJoin = root.join("customerEntity");
         this.currencyEntityJoin = root.join("currencyEntity");
+        this.root = root;
     }
 
     WalletSearchPredicate customerId(Long customerId) {

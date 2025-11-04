@@ -1,8 +1,6 @@
 package ing.Digital.Wallet.wallet_tx.jpa.entity;
 
 import ing.Digital.Wallet.common.jpa.entity.AbstractEntity;
-import ing.Digital.Wallet.common.jpa.entity.AbstractStatusEntity;
-import ing.Digital.Wallet.wallet.service.model.Wallet;
 import ing.Digital.Wallet.wallet_tx.service.model.OppositePartyStatus;
 import ing.Digital.Wallet.wallet_tx.service.model.OppositePartyType;
 import ing.Digital.Wallet.wallet_tx.service.model.TransactionType;

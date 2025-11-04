@@ -1,6 +1,5 @@
 package ing.Digital.Wallet.customer.jpa.adapter;
 
-import ing.Digital.Wallet.customer.jpa.repository.CustomerJpaRepository;
 import ing.Digital.Wallet.customer.jpa.repository.CustomerRepository;
 import ing.Digital.Wallet.customer.service.model.Customer;
 import lombok.RequiredArgsConstructor;

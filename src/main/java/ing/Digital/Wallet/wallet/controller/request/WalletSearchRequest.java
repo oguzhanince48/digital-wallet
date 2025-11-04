@@ -1,6 +1,5 @@
 package ing.Digital.Wallet.wallet.controller.request;
 
-import ing.Digital.Wallet.currency.jpa.model.Currency;
 import ing.Digital.Wallet.currency.jpa.model.CurrencyCode;
 import ing.Digital.Wallet.wallet.service.model.WalletSearch;
 import jakarta.validation.constraints.Min;
@@ -31,6 +30,8 @@ public class WalletSearchRequest {
 
     public WalletSearch toModel(Long customerId) {
         return WalletSearch.builder()
+                .page(page)
+                .size(size)
                 .customerId(customerId)
                 .currencyCode(currency)
                 .minAmount(minAmount)

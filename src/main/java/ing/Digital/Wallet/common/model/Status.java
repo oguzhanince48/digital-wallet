@@ -2,8 +2,6 @@ package ing.Digital.Wallet.common.model;
 
 import lombok.Getter;
 
-import java.util.stream.Stream;
-
 @Getter
 public enum Status {
 

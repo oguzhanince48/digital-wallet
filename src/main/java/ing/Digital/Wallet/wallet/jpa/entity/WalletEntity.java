@@ -2,7 +2,6 @@ package ing.Digital.Wallet.wallet.jpa.entity;
 
 import ing.Digital.Wallet.common.jpa.entity.AbstractStatusEntity;
 import ing.Digital.Wallet.currency.jpa.entity.CurrencyEntity;
-import ing.Digital.Wallet.currency.jpa.model.Currency;
 import ing.Digital.Wallet.customer.jpa.entity.CustomerEntity;
 import ing.Digital.Wallet.wallet.service.model.Wallet;
 import jakarta.persistence.Column;
@@ -12,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.math.BigDecimal;
 
 @Getter
@@ -38,6 +38,8 @@ public class WalletEntity extends AbstractStatusEntity {
 
     public Wallet toModel() {
         return Wallet.builder()
+                .id(getId())
+                .createdAt(getCreatedDate())
                 .walletName(walletName)
                 .isActiveForShopping(isActiveForShopping)
                 .isActiveForWithdraw(isActiveForWithdraw)

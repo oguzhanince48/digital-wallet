@@ -1,6 +1,5 @@
 package ing.Digital.Wallet.wallet.service;
 
-import ing.Digital.Wallet.wallet.controller.request.WalletCreateRequest;
 import ing.Digital.Wallet.wallet.jpa.WalletJpaRepositoryAdapter;
 import ing.Digital.Wallet.wallet.service.model.Wallet;
 import ing.Digital.Wallet.wallet.service.model.WalletCreate;

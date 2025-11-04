@@ -2,8 +2,6 @@ package ing.Digital.Wallet.approval.service;
 
 import ing.Digital.Wallet.wallet_tx.service.model.OppositePartyStatus;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTx;
-
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

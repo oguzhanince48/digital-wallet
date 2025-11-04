@@ -2,7 +2,6 @@ package ing.Digital.Wallet.wallet_tx.controller.request;
 
 import ing.Digital.Wallet.wallet_tx.service.model.OppositePartyType;
 import ing.Digital.Wallet.wallet_tx.service.model.TransactionType;
-import ing.Digital.Wallet.wallet_tx.service.model.WalletDeposit;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletWithdraw;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

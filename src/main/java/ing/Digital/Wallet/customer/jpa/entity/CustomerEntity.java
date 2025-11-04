@@ -1,11 +1,10 @@
 package ing.Digital.Wallet.customer.jpa.entity;
 
-import ing.Digital.Wallet.common.jpa.entity.AbstractStatusEntity;
+import ing.Digital.Wallet.common.jpa.entity.AbstractEntity;
 import ing.Digital.Wallet.customer.service.model.Customer;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +12,7 @@ import lombok.Setter;
 @Setter
 @Table(name = "customer")
 @Entity
-public class CustomerEntity extends AbstractStatusEntity {
+public class CustomerEntity extends AbstractEntity {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
@@ -26,7 +25,6 @@ public class CustomerEntity extends AbstractStatusEntity {
                 .id(super.getId())
                 .createdDate(super.getCreatedDate())
                 .updatedDate(super.getUpdatedDate())
-                .status(super.getStatus())
                 .name(name)
                 .surname(surname)
                 .identityNumber(identityNumber)

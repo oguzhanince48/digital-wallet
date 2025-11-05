@@ -47,7 +47,6 @@ public class WalletTxService {
         BalanceChange balanceChange = buildBalanceChange(walletTransaction,oppositePartyStatus);
         walletJpaRepositoryAdapter.upsertBalance(balanceChange);
         WalletTxInfo walletTxInfo = buildWalletTxInfo(walletTransaction,oppositePartyStatus);
-        //add current balance with reusable balance to walletTxInfo
         return walletTxJpaRepositoryAdapter.save(walletTxInfo);
     }
 

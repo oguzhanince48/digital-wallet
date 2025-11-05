@@ -26,7 +26,7 @@ public class RestExceptionHandler extends BaseController{
 
     @ExceptionHandler(WalletApiBusinessException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public ResponseEntity<ErrorResponse> handleResourceNotFound(WalletApiBusinessException ex, Locale locale) {
+    public ResponseEntity<ErrorResponse> handleWalletApiBusiness(WalletApiBusinessException ex, Locale locale) {
         log.error("An business exception error occurred! Details: ", ex);
         List<String> messageList = retrieveMessage(ex.getKey(), locale, ex.getArgs());
         return new ResponseEntity<>(new ErrorResponse(messageList.getFirst(),messageList.get(1)), HttpStatus.NOT_FOUND);

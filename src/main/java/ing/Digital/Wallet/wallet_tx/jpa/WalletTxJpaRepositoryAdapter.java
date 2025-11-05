@@ -3,6 +3,7 @@ package ing.Digital.Wallet.wallet_tx.jpa;
 import ing.Digital.Wallet.wallet_tx.jpa.entity.WalletTxEntity;
 import ing.Digital.Wallet.wallet_tx.jpa.repository.WalletTxJpaRepository;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTx;
+import ing.Digital.Wallet.wallet_tx.service.model.WalletTxApproval;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTxInfo;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTxSearch;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTxSearchResult;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -43,10 +45,10 @@ public class WalletTxJpaRepositoryAdapter {
                 .toModel();
     }
 
-    public WalletTx updateStatus(WalletTx walletTx){
+    public WalletTx updateStatus(WalletTx walletTx, WalletTxApproval walletTxApproval){
         WalletTxEntity walletTxEntity = walletTxJpaRepository.findById(walletTx.getId())
                 .orElseThrow(() -> new RuntimeException("WalletTx not found"));
-        walletTxEntity.setOppositePartyStatus(walletTx.getOppositePartyStatus());
+        walletTxEntity.setOppositePartyStatus(walletTxApproval.getOppositePartyStatus());
         walletTxEntity.setUpdatedDate(LocalDateTime.now());
         return walletTxJpaRepository.save(walletTxEntity).toModel();
     }
@@ -68,15 +70,14 @@ public class WalletTxJpaRepositoryAdapter {
 
     private List<WalletTx> retrieveResults(WalletTxSearch walletTxSearch) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<WalletTx> query = criteriaBuilder.createQuery(WalletTx.class);
-        Root<WalletTxEntity> walletEntityRoot = query.from(WalletTxEntity.class);
-        query.where(prepareSearchPredicate(criteriaBuilder, walletEntityRoot, walletTxSearch));
-        query.groupBy(walletEntityRoot.get("id"));
+        CriteriaQuery<WalletTxEntity> query = criteriaBuilder.createQuery(WalletTxEntity.class);
+        Root<WalletTxEntity> walletTxEntityRoot = query.from(WalletTxEntity.class);
+        query.where(prepareSearchPredicate(criteriaBuilder, walletTxEntityRoot, walletTxSearch));
 
         return entityManager.createQuery(query)
                 .setFirstResult(walletTxSearch.getPage() * walletTxSearch.getSize())
                 .setMaxResults(walletTxSearch.getSize())
-                .getResultList();
+                .getResultList().stream().map(WalletTxEntity::toModel).collect(Collectors.toList());
     }
 
     private Long retrieveTotalSize(WalletTxSearch walletTxSearch) {

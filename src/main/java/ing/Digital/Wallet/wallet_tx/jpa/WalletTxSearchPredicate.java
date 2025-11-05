@@ -17,6 +17,7 @@ public class WalletTxSearchPredicate {
     WalletTxSearchPredicate(CriteriaBuilder criteriaBuilder, Root<WalletTxEntity> root) {
         this.predicateList = new ArrayList<>();
         this.criteriaBuilder = criteriaBuilder;
+        this.root = root;
     }
 
     WalletTxSearchPredicate walletId(Long walletId) {

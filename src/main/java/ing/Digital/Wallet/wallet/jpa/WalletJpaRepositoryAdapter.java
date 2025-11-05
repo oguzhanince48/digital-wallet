@@ -71,8 +71,14 @@ public class WalletJpaRepositoryAdapter {
 
     public void upsertBalance(BalanceChange balanceChange) {
         CustomerEntity customerEntity = customerRepository.findById(balanceChange.getCustomerId());
-        WalletEntity walletEntity = walletJpaRepository.findByIdAndCustomerEntity(balanceChange.getWalletId(), customerEntity);
+        WalletEntity walletEntity = walletJpaRepository.findByIdAndCustomerEntity(balanceChange.getWalletId(), customerEntity).orElseThrow();
         walletJpaRepository.updateBalanceAmount(walletEntity.getId(),balanceChange.getAmount(),balanceChange.getUsableBalanceAmount());
+    }
+
+    public Wallet retrieve(Long walletId, Long customerId) {
+        CustomerEntity customerEntity = retrieveCustomerEntity(customerId);
+        WalletEntity walletEntity = walletJpaRepository.findByIdAndCustomerEntity(walletId, customerEntity).orElseThrow();
+        return walletEntity.toModel();
     }
 
     private List<Wallet> retrieveResults(WalletSearch walletSearch) {
@@ -106,5 +112,9 @@ public class WalletJpaRepositoryAdapter {
                 .minAmount(walletSearch.getMinAmount())
                 .maxAmount(walletSearch.getMaxAmount())
                 .buildArray();
+    }
+
+    private CustomerEntity retrieveCustomerEntity(Long customerId) {
+        return customerRepository.findById(customerId);
     }
 }

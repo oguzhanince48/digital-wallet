@@ -8,9 +8,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 public interface WalletJpaRepository extends JpaRepository<WalletEntity,Long> {
-    WalletEntity findByIdAndCustomerEntity(Long walletId, CustomerEntity customerEntity);
+    Optional<WalletEntity> findByIdAndCustomerEntity(Long walletId, CustomerEntity customerEntity);
     @Modifying
     @Query(value = "update wallet set balance = balance + :amount, usable_balance = usable_balance + :usableBalanceAmount, udate = now() where id = :id", nativeQuery = true)
     void updateBalanceAmount(@Param("id") Long id,

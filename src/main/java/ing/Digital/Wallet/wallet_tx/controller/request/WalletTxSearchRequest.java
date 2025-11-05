@@ -24,7 +24,7 @@ public class WalletTxSearchRequest {
     public WalletTxSearch toModel(Long customerId) {
         return WalletTxSearch.builder()
                 .page(page)
-                .size(0)
+                .size(size)
                 .walletId(walletId)
                 .customerId(customerId)
                 .build();

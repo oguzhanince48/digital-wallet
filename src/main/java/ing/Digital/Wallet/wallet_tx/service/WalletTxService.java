@@ -44,7 +44,6 @@ public class WalletTxService {
 
     @Transactional
     public WalletTx withdraw(WalletTransaction walletTransaction){
-        // TODO add balance check before withdraw
         OppositePartyStatus oppositePartyStatus = decideOppositePartyStatus(walletTransaction.getAmount());
         BalanceChange balanceChange = buildBalanceChange(walletTransaction,oppositePartyStatus);
         walletJpaRepositoryAdapter.upsertBalance(balanceChange);
@@ -63,7 +62,7 @@ public class WalletTxService {
         }
     }
 
-    private BalanceChange buildBalanceChange(WalletTransaction walletTransaction,OppositePartyStatus oppositePartyStatus){
+    private BalanceChange buildBalanceChange(WalletTransaction walletTransaction, OppositePartyStatus oppositePartyStatus){
         switch (walletTransaction.getTransactionType()){
             case DEPOSIT -> {
                 return BalanceChange.builder()
@@ -76,8 +75,8 @@ public class WalletTxService {
             case WITHDRAW -> {
                 return BalanceChange.builder()
                         .walletId(walletTransaction.getWalletId())
-                        .amount(walletTransaction.getAmount().negate())
-                        .usableBalanceAmount(OppositePartyStatus.APPROVED.equals(oppositePartyStatus) ? walletTransaction.getAmount().negate() : BigDecimal.ZERO)
+                        .amount(OppositePartyStatus.APPROVED.equals(oppositePartyStatus) ? walletTransaction.getAmount().negate() : BigDecimal.ZERO)
+                        .usableBalanceAmount(walletTransaction.getAmount().negate())
                         .customerId(walletTransaction.getCustomerId())
                         .build();
         }

@@ -1,7 +1,9 @@
 package ing.Digital.Wallet.wallet_tx.jpa;
 
+import ing.Digital.Wallet.common.exception.WalletApiBusinessException;
 import ing.Digital.Wallet.wallet_tx.jpa.entity.WalletTxEntity;
 import ing.Digital.Wallet.wallet_tx.jpa.repository.WalletTxJpaRepository;
+import ing.Digital.Wallet.wallet_tx.jpa.repository.WalletTxRepository;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTx;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTxApproval;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTxInfo;
@@ -26,7 +28,7 @@ import java.util.stream.Collectors;
 public class WalletTxJpaRepositoryAdapter {
 
     private final EntityManager entityManager;
-    private final WalletTxJpaRepository walletTxJpaRepository;
+    private final WalletTxRepository walletTxRepository;
 
     public WalletTx save(WalletTxInfo walletTxInfo){
         WalletTxEntity walletTxEntity = new WalletTxEntity();
@@ -36,21 +38,18 @@ public class WalletTxJpaRepositoryAdapter {
         walletTxEntity.setOppositePartyType(walletTxInfo.getOppositePartyType());
         walletTxEntity.setOppositePartyStatus(walletTxInfo.getOppositePartyStatus());
         walletTxEntity.setTransactionType(walletTxInfo.getTransactionType());
-        return walletTxJpaRepository.save(walletTxEntity).toModel();
+        return walletTxRepository.save(walletTxEntity).toModel();
     }
 
     public WalletTx retrieve(Long id){
-        return walletTxJpaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("WalletTx not found"))
-                .toModel();
+        return walletTxRepository.retrieve(id).toModel();
     }
 
     public WalletTx updateStatus(WalletTx walletTx, WalletTxApproval walletTxApproval){
-        WalletTxEntity walletTxEntity = walletTxJpaRepository.findById(walletTx.getId())
-                .orElseThrow(() -> new RuntimeException("WalletTx not found"));
+        WalletTxEntity walletTxEntity = walletTxRepository.retrieve(walletTx.getId());
         walletTxEntity.setOppositePartyStatus(walletTxApproval.getOppositePartyStatus());
         walletTxEntity.setUpdatedDate(LocalDateTime.now());
-        return walletTxJpaRepository.save(walletTxEntity).toModel();
+        return walletTxRepository.save(walletTxEntity).toModel();
     }
 
     public WalletTxSearchResult search(WalletTxSearch walletTxSearch){

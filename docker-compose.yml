@@ -3,10 +3,36 @@ services:
   app:
     build:
       context: .           # use current directory as build context
-      dockerfile: Dockerfile  # optional if named "Dockerfile"
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     volumes:
       - h2data:/data
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - monitoring
 volumes:
   h2data:
+
+networks:
+  monitoring:
+    driver: bridge

@@ -1,13 +1,11 @@
 package ing.Digital.Wallet.wallet_tx.service;
 
-import ing.Digital.Wallet.wallet_tx.service.model.OppositePartyType;
-import ing.Digital.Wallet.wallet_tx.service.model.TransactionType;
-import ing.Digital.Wallet.wallet_tx.service.model.WalletTxApproval;
 import ing.Digital.Wallet.wallet.jpa.WalletJpaRepositoryAdapter;
 import ing.Digital.Wallet.wallet.service.model.BalanceChange;
 import ing.Digital.Wallet.wallet_tx.jpa.WalletTxJpaRepositoryAdapter;
 import ing.Digital.Wallet.wallet_tx.service.model.OppositePartyStatus;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTx;
+import ing.Digital.Wallet.wallet_tx.service.model.WalletTxApproval;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

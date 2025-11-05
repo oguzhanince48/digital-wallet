@@ -5,7 +5,6 @@ import ing.Digital.Wallet.wallet_tx.service.model.OppositePartyType;
 import ing.Digital.Wallet.wallet_tx.service.model.TransactionType;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTx;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;

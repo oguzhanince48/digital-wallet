@@ -1,8 +1,8 @@
 package ing.Digital.Wallet.wallet_tx.service;
 
-import ing.Digital.Wallet.wallet_tx.service.model.WalletTxApproval;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTransaction;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTx;
+import ing.Digital.Wallet.wallet_tx.service.model.WalletTxApproval;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTxSearch;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTxSearchResult;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +23,7 @@ public class WalletTxFacade {
     }
 
     public WalletTx deposit(WalletTransaction walletTransaction){
+        walletTxValidationService.validateDeposit(walletTransaction);
         return walletTxService.deposit(walletTransaction);
     }
 

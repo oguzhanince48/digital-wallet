@@ -1,10 +1,10 @@
 package ing.Digital.Wallet.wallet_tx.controller;
 
-import ing.Digital.Wallet.wallet_tx.controller.request.WalletTxApprovalRequest;
 import ing.Digital.Wallet.common.rest.BaseController;
 import ing.Digital.Wallet.wallet.controller.response.model.DataResponse;
 import ing.Digital.Wallet.wallet.controller.response.model.Response;
 import ing.Digital.Wallet.wallet_tx.controller.request.WalletDepositRequest;
+import ing.Digital.Wallet.wallet_tx.controller.request.WalletTxApprovalRequest;
 import ing.Digital.Wallet.wallet_tx.controller.request.WalletTxSearchRequest;
 import ing.Digital.Wallet.wallet_tx.controller.request.WalletWithdrawRequest;
 import ing.Digital.Wallet.wallet_tx.controller.response.WalletTxSearchResponse;

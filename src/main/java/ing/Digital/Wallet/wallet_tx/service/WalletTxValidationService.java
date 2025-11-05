@@ -1,6 +1,5 @@
 package ing.Digital.Wallet.wallet_tx.service;
 
-import ing.Digital.Wallet.wallet_tx.service.model.WalletTxApproval;
 import ing.Digital.Wallet.wallet.jpa.WalletJpaRepositoryAdapter;
 import ing.Digital.Wallet.wallet.service.model.Wallet;
 import ing.Digital.Wallet.wallet_tx.jpa.WalletTxJpaRepositoryAdapter;
@@ -8,6 +7,7 @@ import ing.Digital.Wallet.wallet_tx.service.model.OppositePartyStatus;
 import ing.Digital.Wallet.wallet_tx.service.model.TransactionType;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTransaction;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTx;
+import ing.Digital.Wallet.wallet_tx.service.model.WalletTxApproval;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,8 +21,14 @@ public class WalletTxValidationService {
     private final WalletJpaRepositoryAdapter walletJpaRepositoryAdapter;
     private final WalletTxJpaRepositoryAdapter walletTxJpaRepositoryAdapter;
 
+    public void validateDeposit(WalletTransaction walletTransaction) {
+        Wallet wallet = retrieveWallet(walletTransaction.getWalletId(),walletTransaction.getWalletId());
+        validateDepositEnabled(wallet);
+    }
+
     public void validateWithdraw(WalletTransaction walletTransaction) {
         Wallet wallet = retrieveWallet(walletTransaction.getWalletId(),walletTransaction.getWalletId());
+        validateWithdrawEnabled(wallet);
         validateSufficientBalanceByTransactionType(wallet, walletTransaction.getAmount(),walletTransaction.getTransactionType());
     }
 
@@ -64,6 +70,19 @@ public class WalletTxValidationService {
         }
     }
 
+    private void validateWithdrawEnabled(Wallet wallet) {
+        if (!wallet.getIsActiveForWithdraw()) {
+            throw new IllegalArgumentException("Withdrawals are disabled for this wallet");
+        }
+    }
+
+    private void validateDepositEnabled(Wallet wallet) {
+        if (!wallet.getIsActiveForShopping()) {
+            throw new IllegalArgumentException("Withdrawals are disabled for this wallet");
+        }
+    }
+
+
     private Wallet retrieveWallet(Long walletId, Long customerId) {
         return walletJpaRepositoryAdapter.retrieve(walletId, customerId);
     }
@@ -71,5 +90,7 @@ public class WalletTxValidationService {
     private WalletTx retrieveWalletTx(Long transactionId) {
         return walletTxJpaRepositoryAdapter.retrieve(transactionId);
     }
+
+
 
 }

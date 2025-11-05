@@ -1,7 +1,7 @@
 package ing.Digital.Wallet.wallet_tx.controller.request;
 
-import ing.Digital.Wallet.wallet_tx.service.model.WalletTxApproval;
 import ing.Digital.Wallet.wallet_tx.service.model.OppositePartyStatus;
+import ing.Digital.Wallet.wallet_tx.service.model.WalletTxApproval;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

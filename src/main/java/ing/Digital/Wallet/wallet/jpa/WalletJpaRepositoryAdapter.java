@@ -5,7 +5,7 @@ import ing.Digital.Wallet.currency.jpa.repository.CurrencyRepository;
 import ing.Digital.Wallet.customer.jpa.entity.CustomerEntity;
 import ing.Digital.Wallet.customer.jpa.repository.CustomerRepository;
 import ing.Digital.Wallet.wallet.jpa.entity.WalletEntity;
-import ing.Digital.Wallet.wallet.jpa.repository.WalletJpaRepository;
+import ing.Digital.Wallet.wallet.jpa.repository.WalletRepository;
 import ing.Digital.Wallet.wallet.service.model.BalanceChange;
 import ing.Digital.Wallet.wallet.service.model.Wallet;
 import ing.Digital.Wallet.wallet.service.model.WalletCreate;
@@ -34,7 +34,7 @@ public class WalletJpaRepositoryAdapter {
     private final EntityManager entityManager;
     private final CustomerRepository customerRepository;
     private final CurrencyRepository currencyRepository;
-    private final WalletJpaRepository walletJpaRepository;
+    private final WalletRepository walletRepository;
 
     @Transactional(readOnly = true)
     public WalletSearchResult search(WalletSearch walletSearch) {
@@ -66,18 +66,18 @@ public class WalletJpaRepositoryAdapter {
         walletEntity.setIsActiveForWithdraw(walletCreate.getIsActiveForWithdraw());
         walletEntity.setCustomerEntity(customerEntity);
         walletEntity.setCurrencyEntity(currencyEntity);
-        return walletJpaRepository.save(walletEntity).toModel();
+        return walletRepository.save(walletEntity).toModel();
     }
 
     public void upsertBalance(BalanceChange balanceChange) {
         CustomerEntity customerEntity = customerRepository.findById(balanceChange.getCustomerId());
-        WalletEntity walletEntity = walletJpaRepository.findByIdAndCustomerEntity(balanceChange.getWalletId(), customerEntity).orElseThrow();
-        walletJpaRepository.updateBalanceAmount(walletEntity.getId(),balanceChange.getAmount(),balanceChange.getUsableBalanceAmount());
+        WalletEntity walletEntity = walletRepository.retrieveByIdAndCustomer(balanceChange.getWalletId(), customerEntity);
+        walletRepository.updateBalanceAmount(walletEntity.getId(),balanceChange.getAmount(),balanceChange.getUsableBalanceAmount());
     }
 
     public Wallet retrieve(Long walletId, Long customerId) {
         CustomerEntity customerEntity = retrieveCustomerEntity(customerId);
-        WalletEntity walletEntity = walletJpaRepository.findByIdAndCustomerEntity(walletId, customerEntity).orElseThrow();
+        WalletEntity walletEntity = walletRepository.retrieveByIdAndCustomer(walletId, customerEntity);
         return walletEntity.toModel();
     }
 

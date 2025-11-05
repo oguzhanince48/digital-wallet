@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .           # use current directory as build context
+      dockerfile: Dockerfile  # optional if named "Dockerfile"
+    ports:
+      - "8080:8080"
+    volumes:
+      - h2data:/data
+volumes:
+  h2data:

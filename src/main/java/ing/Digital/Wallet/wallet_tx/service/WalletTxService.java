@@ -1,6 +1,7 @@
 package ing.Digital.Wallet.wallet_tx.service;
 
 import ing.Digital.Wallet.common.configuration.WalletConfiguration;
+import ing.Digital.Wallet.common.exception.WalletApiBusinessException;
 import ing.Digital.Wallet.wallet.jpa.WalletJpaRepositoryAdapter;
 import ing.Digital.Wallet.wallet.service.model.BalanceChange;
 import ing.Digital.Wallet.wallet_tx.jpa.WalletTxJpaRepositoryAdapter;
@@ -46,7 +47,6 @@ public class WalletTxService {
         BalanceChange balanceChange = buildBalanceChange(walletTransaction,oppositePartyStatus);
         walletJpaRepositoryAdapter.upsertBalance(balanceChange);
         WalletTxInfo walletTxInfo = buildWalletTxInfo(walletTransaction,oppositePartyStatus);
-
         //add current balance with reusable balance to walletTxInfo
         return walletTxJpaRepositoryAdapter.save(walletTxInfo);
     }
@@ -78,7 +78,7 @@ public class WalletTxService {
                         .customerId(walletTransaction.getCustomerId())
                         .build();
         }
-            default -> throw new IllegalArgumentException("Unsupported transaction type: " + walletTransaction.getTransactionType());
+            default -> throw new WalletApiBusinessException("wallet-api.invalid.transactionType");
         }
     }
 

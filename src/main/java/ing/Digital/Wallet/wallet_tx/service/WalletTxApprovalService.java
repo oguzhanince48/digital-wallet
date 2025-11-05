@@ -1,5 +1,6 @@
 package ing.Digital.Wallet.wallet_tx.service;
 
+import ing.Digital.Wallet.common.exception.WalletApiBusinessException;
 import ing.Digital.Wallet.wallet.jpa.WalletJpaRepositoryAdapter;
 import ing.Digital.Wallet.wallet.service.model.BalanceChange;
 import ing.Digital.Wallet.wallet_tx.jpa.WalletTxJpaRepositoryAdapter;
@@ -33,7 +34,7 @@ public class WalletTxApprovalService {
             case DEPOSIT -> buildDepositBalanceChange(walletTx, walletTxApproval);
             case WITHDRAW -> buildWithdrawBalanceChange(walletTx, walletTxApproval);
             default ->
-                    throw new IllegalArgumentException("Invalid opposite party status: " + walletTxApproval.getOppositePartyStatus());
+                    throw new WalletApiBusinessException("wallet-api.invalid.oppositePartyStatus");
         };
     }
 

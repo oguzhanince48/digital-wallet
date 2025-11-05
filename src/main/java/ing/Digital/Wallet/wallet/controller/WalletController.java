@@ -31,6 +31,7 @@ public class WalletController extends BaseController {
 
     @GetMapping
     public Response<DataResponse<WalletResponse>> search(@Valid WalletSearchRequest walletSearchRequest, @RequestHeader("customerId") Long customerId) {
+        log.info("Wallet Search Request: {}, customerId: {}", walletSearchRequest.toString(), customerId);
         WalletSearchResult walletSearchResult = walletService.search(walletSearchRequest.toModel(customerId));
         List<WalletResponse> walletResponseList = walletSearchResult.getWallets()
                 .stream()

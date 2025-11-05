@@ -1,5 +1,8 @@
 package ing.Digital.Wallet.wallet_tx.service.model;
 
+import lombok.Getter;
+
+@Getter
 public enum OppositePartyStatus {
     PENDING(1),
     APPROVED(2),
@@ -10,7 +13,4 @@ public enum OppositePartyStatus {
         this.code = code;
     }
 
-    public Integer getCode() {
-        return code;
-    }
 }

@@ -34,6 +34,7 @@ public class WalletTxController extends BaseController {
 
     @GetMapping
     public Response<DataResponse<WalletTxSearchResponse>> search(@Valid WalletTxSearchRequest walletTxSearchRequest, @RequestHeader ("customerId") Long customerId) {
+        log.info("Wallet Transaction Search Request: {}, customerId: {}", walletTxSearchRequest.toString(), customerId);
         WalletTxSearchResult walletTxSearchResult = walletTxFacade.search(walletTxSearchRequest.toModel(customerId));
         List<WalletTxSearchResponse> walletTxSearchResponseList = walletTxSearchResult.getWalletTxList().stream()
                 .map(WalletTxSearchResponse::fromModel)
@@ -43,18 +44,21 @@ public class WalletTxController extends BaseController {
 
     @PostMapping("/deposit")
     public Response<WalletTx> deposit(@Valid @RequestBody WalletDepositRequest walletDepositRequest, @RequestHeader ("customerId") Long customerId) {
+        log.info("Wallet Deposit Request: {}, customerId: {}", walletDepositRequest.toString(), customerId);
         WalletTx walletTx = walletTxFacade.deposit(walletDepositRequest.toModel(customerId));
         return respond(walletTx);
     }
 
     @PostMapping("/withdraw")
     public Response<WalletTx> deposit(@Valid @RequestBody WalletWithdrawRequest walletWithdrawRequest, @RequestHeader ("customerId") Long customerId) {
+        log.info("Wallet Withdraw Request: {}, customerId: {}", walletWithdrawRequest.toString(), customerId);
         WalletTx walletTx = walletTxFacade.withdraw(walletWithdrawRequest.toModel(customerId));
         return respond(walletTx);
     }
 
     @PostMapping("/approve")
     public Response<WalletTx> approve(@Valid @RequestBody WalletTxApprovalRequest walletTxApprovalRequest, @RequestHeader("customerId") Long customerId) {
+        log.info("Wallet Approval Request: {}, customerId: {}", walletTxApprovalRequest.toString(), customerId);
         WalletTx walletTx = walletTxFacade.processApproval(walletTxApprovalRequest.toModel(customerId));
         return respond(walletTx);
     }

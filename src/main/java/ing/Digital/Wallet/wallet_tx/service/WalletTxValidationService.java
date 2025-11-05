@@ -1,5 +1,6 @@
 package ing.Digital.Wallet.wallet_tx.service;
 
+import ing.Digital.Wallet.common.exception.WalletApiBusinessException;
 import ing.Digital.Wallet.wallet.jpa.WalletJpaRepositoryAdapter;
 import ing.Digital.Wallet.wallet.service.model.Wallet;
 import ing.Digital.Wallet.wallet_tx.jpa.WalletTxJpaRepositoryAdapter;
@@ -36,7 +37,7 @@ public class WalletTxValidationService {
         WalletTx walletTx = retrieveWalletTx(walletTxApproval.getTransactionId());
         Wallet wallet = retrieveWallet(walletTx.getWalletId(),walletTxApproval.getCustomerId());
         validateWalletTxOppositePartyStatus(walletTx);
-        validateOppositePartyStatus(walletTx.getOppositePartyStatus(),walletTxApproval.getOppositePartyStatus());
+        validateOppositePartyStatus(walletTxApproval.getOppositePartyStatus());
         validateWalletBelongsToCustomer(wallet, walletTxApproval.getCustomerId());
     }
 
@@ -48,40 +49,39 @@ public class WalletTxValidationService {
 
     private void validateSufficientBalance(Wallet wallet, BigDecimal amount) {
         if (wallet.getUsableBalance().compareTo(amount) < 0) {
-            throw new IllegalArgumentException("Insufficient balance for withdrawal");
+            throw new WalletApiBusinessException("wallet-api.insufficient.funds", wallet.getUsableBalance().toString());
         }
     }
 
     private void validateWalletBelongsToCustomer(Wallet wallet, Long customerId) {
         if (!customerId.equals(wallet.getCustomer().getId())) {
-            throw new IllegalArgumentException("Wallet does not belong to the customer");
+            throw new WalletApiBusinessException("wallet-api.wallet.notBelongToCustomer");
         }
     }
 
-    private void validateOppositePartyStatus(OppositePartyStatus currentOppositePartyStatus, OppositePartyStatus oppositePartyStatus) {
+    private void validateOppositePartyStatus(OppositePartyStatus oppositePartyStatus) {
         if(!OppositePartyStatus.APPROVED.equals(oppositePartyStatus) && !OppositePartyStatus.DENIED.equals(oppositePartyStatus)) {
-            throw new IllegalArgumentException("Invalid opposite party status: " + oppositePartyStatus); //TODO exception handling
+            throw new WalletApiBusinessException("wallet-api.invalid.oppositePartyStatus",oppositePartyStatus.name());
         }
     }
 
     private void validateWalletTxOppositePartyStatus(WalletTx walletTx) {
         if(!OppositePartyStatus.PENDING.equals(walletTx.getOppositePartyStatus())) {
-            throw new IllegalArgumentException("Wallet transaction is not in PENDING status: " + walletTx.getOppositePartyStatus()); //TODO exception handling
+            throw new WalletApiBusinessException("wallet-api.oppositePartyStatus.notPending");
         }
     }
 
     private void validateWithdrawEnabled(Wallet wallet) {
         if (!wallet.getIsActiveForWithdraw()) {
-            throw new IllegalArgumentException("Withdrawals are disabled for this wallet");
+            throw new WalletApiBusinessException("wallet-api.withdraw.disabled");
         }
     }
 
     private void validateDepositEnabled(Wallet wallet) {
         if (!wallet.getIsActiveForShopping()) {
-            throw new IllegalArgumentException("Withdrawals are disabled for this wallet");
+            throw new WalletApiBusinessException("wallet-api.deposit.disabled");
         }
     }
-
 
     private Wallet retrieveWallet(Long walletId, Long customerId) {
         return walletJpaRepositoryAdapter.retrieve(walletId, customerId);

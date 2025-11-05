@@ -30,6 +30,21 @@ public class WalletTxJpaRepositoryAdapter {
     private final EntityManager entityManager;
     private final WalletTxRepository walletTxRepository;
 
+    public WalletTxSearchResult search(WalletTxSearch walletTxSearch){
+        Long totalSize = retrieveTotalSize(walletTxSearch);
+        List<WalletTx> walletTxList = List.of();
+
+        if (totalSize > 0) {
+            walletTxList = retrieveResults(walletTxSearch);
+        }
+        return WalletTxSearchResult.builder()
+                .walletTxList(walletTxList)
+                .totalCount(totalSize)
+                .page(walletTxSearch.getPage())
+                .size(walletTxSearch.getSize())
+                .build();
+    }
+
     public WalletTx save(WalletTxInfo walletTxInfo){
         WalletTxEntity walletTxEntity = new WalletTxEntity();
         walletTxEntity.setCreatedDate(LocalDateTime.now());
@@ -50,21 +65,6 @@ public class WalletTxJpaRepositoryAdapter {
         walletTxEntity.setOppositePartyStatus(walletTxApproval.getOppositePartyStatus());
         walletTxEntity.setUpdatedDate(LocalDateTime.now());
         return walletTxRepository.save(walletTxEntity).toModel();
-    }
-
-    public WalletTxSearchResult search(WalletTxSearch walletTxSearch){
-        Long totalSize = retrieveTotalSize(walletTxSearch);
-        List<WalletTx> walletTxList = List.of();
-
-        if (totalSize > 0) {
-            walletTxList = retrieveResults(walletTxSearch);
-        }
-        return WalletTxSearchResult.builder()
-                .walletTxList(walletTxList)
-                .totalCount(totalSize)
-                .page(walletTxSearch.getPage())
-                .size(walletTxSearch.getSize())
-                .build();
     }
 
     private List<WalletTx> retrieveResults(WalletTxSearch walletTxSearch) {

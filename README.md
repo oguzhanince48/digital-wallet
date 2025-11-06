@@ -61,7 +61,7 @@ Authentication
 The API uses Basic Authentication. Use the following default credentials:
 - Username: test          - Username: admin
 - Password: test123       - Password: admin123
-- Role: USER              - Role: ADMIN
+- Role: CUSTOMER          - Role: ADMIN
 
 Postman Collection
 A Postman collection is provided in the `docs/Digital Wallet.postman_collection.json` directory for easy testing of the API. Import it into Postman to get started quickly.

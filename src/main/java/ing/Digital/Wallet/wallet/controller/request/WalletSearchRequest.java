@@ -22,8 +22,7 @@ public class WalletSearchRequest {
     @Builder.Default
     private Integer size = 10;
 
-    @Builder.Default
-    private CurrencyCode currency = CurrencyCode.TRY;
+    private CurrencyCode currency;
     @Builder.Default
     private BigDecimal minAmount = BigDecimal.ZERO;
     private BigDecimal maxAmount;

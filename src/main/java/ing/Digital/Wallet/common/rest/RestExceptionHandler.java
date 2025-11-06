@@ -29,7 +29,7 @@ public class RestExceptionHandler extends BaseController{
     public ResponseEntity<ErrorResponse> handleWalletApiBusiness(WalletApiBusinessException ex, Locale locale) {
         log.error("An business exception error occurred! Details: ", ex);
         List<String> messageList = retrieveMessage(ex.getKey(), locale, ex.getArgs());
-        return new ResponseEntity<>(new ErrorResponse(messageList.getFirst(),messageList.get(1)), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ErrorResponse(messageList.getFirst(), messageList.get(1)), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)

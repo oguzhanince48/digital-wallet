@@ -50,7 +50,7 @@ public class WalletTxController extends BaseController {
     }
 
     @PostMapping("/withdraw")
-    public Response<WalletTx> deposit(@Valid @RequestBody WalletWithdrawRequest walletWithdrawRequest, @RequestHeader ("customerId") Long customerId) {
+    public Response<WalletTx> withdraw(@Valid @RequestBody WalletWithdrawRequest walletWithdrawRequest, @RequestHeader ("customerId") Long customerId) {
         log.info("Wallet Withdraw Request: {}, customerId: {}", walletWithdrawRequest.toString(), customerId);
         WalletTx walletTx = walletTxFacade.withdraw(walletWithdrawRequest.toModel(customerId));
         return respond(walletTx);

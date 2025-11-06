@@ -1,8 +1,6 @@
 package ing.Digital.Wallet.wallet_tx.jpa;
 
-import ing.Digital.Wallet.common.exception.WalletApiBusinessException;
 import ing.Digital.Wallet.wallet_tx.jpa.entity.WalletTxEntity;
-import ing.Digital.Wallet.wallet_tx.jpa.repository.WalletTxJpaRepository;
 import ing.Digital.Wallet.wallet_tx.jpa.repository.WalletTxRepository;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTx;
 import ing.Digital.Wallet.wallet_tx.service.model.WalletTxApproval;

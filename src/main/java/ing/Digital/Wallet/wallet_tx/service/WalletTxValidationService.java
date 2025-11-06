@@ -35,10 +35,9 @@ public class WalletTxValidationService {
 
     public void validateApproval(WalletTxApproval walletTxApproval) {
         WalletTx walletTx = retrieveWalletTx(walletTxApproval.getTransactionId());
-        Wallet wallet = retrieveWallet(walletTx.getWalletId(),walletTxApproval.getCustomerId());
+        retrieveWallet(walletTx.getWalletId(),walletTxApproval.getCustomerId());
         validateWalletTxOppositePartyStatus(walletTx);
         validateOppositePartyStatus(walletTxApproval.getOppositePartyStatus());
-        validateWalletBelongsToCustomer(wallet, walletTxApproval.getCustomerId());
     }
 
     private void validateSufficientBalanceByTransactionType(Wallet wallet, BigDecimal amount, TransactionType transactionType) {

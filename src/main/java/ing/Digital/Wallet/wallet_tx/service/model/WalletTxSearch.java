@@ -10,4 +10,6 @@ public class WalletTxSearch {
     private Integer size;
     private Long walletId;
     private Long customerId;
+    private TransactionType transactionType;
+    private OppositePartyStatus oppositePartyStatus;
 }

@@ -1,6 +1,8 @@
 package ing.Digital.Wallet.wallet_tx.jpa;
 
 import ing.Digital.Wallet.wallet_tx.jpa.entity.WalletTxEntity;
+import ing.Digital.Wallet.wallet_tx.service.model.OppositePartyStatus;
+import ing.Digital.Wallet.wallet_tx.service.model.TransactionType;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
@@ -23,6 +25,20 @@ public class WalletTxSearchPredicate {
     WalletTxSearchPredicate walletId(Long walletId) {
         if (Objects.nonNull(walletId)) {
             predicateList.add(criteriaBuilder.equal(root.get("walletId"), walletId));
+        }
+        return this;
+    }
+
+    WalletTxSearchPredicate transactionType(TransactionType transactionType) {
+        if (Objects.nonNull(transactionType)) {
+            predicateList.add(criteriaBuilder.equal(root.get("transactionType"), transactionType));
+        }
+        return this;
+    }
+
+    WalletTxSearchPredicate oppositePartyStatus(OppositePartyStatus oppositePartyStatus) {
+        if (Objects.nonNull(oppositePartyStatus)) {
+            predicateList.add(criteriaBuilder.equal(root.get("oppositePartyStatus"), oppositePartyStatus));
         }
         return this;
     }

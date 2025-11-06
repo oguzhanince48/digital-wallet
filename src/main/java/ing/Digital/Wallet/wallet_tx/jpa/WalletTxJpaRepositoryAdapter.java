@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -92,6 +93,8 @@ public class WalletTxJpaRepositoryAdapter {
     private Predicate[] prepareSearchPredicate(CriteriaBuilder criteriaBuilder, Root<WalletTxEntity> walletEntityRoot, WalletTxSearch walletTxSearch) {
         return new WalletTxSearchPredicate(criteriaBuilder, walletEntityRoot)
                 .walletId(walletTxSearch.getWalletId())
+                .transactionType(walletTxSearch.getTransactionType())
+                .oppositePartyStatus(walletTxSearch.getOppositePartyStatus())
                 .buildArray();
     }
 }

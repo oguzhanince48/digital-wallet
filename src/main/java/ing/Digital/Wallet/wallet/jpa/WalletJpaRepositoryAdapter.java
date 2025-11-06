@@ -25,6 +25,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -108,7 +109,7 @@ public class WalletJpaRepositoryAdapter {
     private Predicate[] prepareSearchPredicate(CriteriaBuilder criteriaBuilder, Root<WalletEntity> walletEntityRoot, WalletSearch walletSearch) {
         return new WalletSearchPredicate(criteriaBuilder, walletEntityRoot)
                 .customerId(walletSearch.getCustomerId())
-                .currencyCode(walletSearch.getCurrencyCode().name())
+                .currencyCode(Objects.nonNull(walletSearch.getCurrencyCode()) ? walletSearch.getCurrencyCode().name() : null)
                 .minAmount(walletSearch.getMinAmount())
                 .maxAmount(walletSearch.getMaxAmount())
                 .buildArray();

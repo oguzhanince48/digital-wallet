@@ -38,7 +38,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"first wallet\",\n    \"isActiveForShopping\": true,\n    \"isActiveForWithdraw\": true,\n    \"currencyCode\": \"TRY\"\n}",
+							"raw": "{\n    \"name\": \"third wallet\",\n    \"isActiveForShopping\": true,\n    \"isActiveForWithdraw\": true,\n    \"currencyCode\": \"TRY\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -147,7 +147,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"amount\":1001,\n    \"walletId\":1,\n    \"oppositePartyType\":\"IBAN\"\n}",
+							"raw": "{\n    \"amount\":1000,\n    \"walletId\":1,\n    \"oppositePartyType\":\"IBAN\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -198,7 +198,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"amount\":1300,\n    \"walletId\":1,\n    \"oppositePartyType\":\"PAYMENT\"\n}",
+							"raw": "{\n    \"amount\":100,\n    \"walletId\":1,\n    \"oppositePartyType\":\"PAYMENT\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -248,7 +248,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/api/v1/transactions?walletId=1",
+							"raw": "{{baseUrl}}/api/v1/transactions",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -259,8 +259,14 @@
 							],
 							"query": [
 								{
-									"key": "walletId",
-									"value": "1"
+									"key": "transactionType",
+									"value": "WITHDRAW",
+									"disabled": true
+								},
+								{
+									"key": "oppositePartyStatus",
+									"value": "APPROVED",
+									"disabled": true
 								}
 							]
 						}
@@ -296,7 +302,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"transactionId\":1,\n    \"status\":\"APPROVED\"\n}",
+							"raw": "{\n    \"transactionId\":5,\n    \"status\":\"DENIED\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -351,7 +357,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"first wallet\",\n    \"isActiveForShopping\": true,\n    \"isActiveForWithdraw\": true,\n    \"currencyCode\": \"TRY\"\n}",
+							"raw": "{\n    \"name\": \"fifth wallet\",\n    \"isActiveForShopping\": true,\n    \"isActiveForWithdraw\": true,\n    \"currencyCode\": \"TRY\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -359,14 +365,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/v1/admin/wallets/create",
+							"raw": "{{baseUrl}}/api/admin/v1/wallets/create",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
-								"v1",
 								"admin",
+								"v1",
 								"wallets",
 								"create"
 							]
@@ -402,7 +408,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"amount\":1001,\n    \"walletId\":1,\n    \"oppositePartyType\":\"IBAN\"\n}",
+							"raw": "{\n    \"amount\":1001,\n    \"walletId\":4,\n    \"oppositePartyType\":\"IBAN\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -453,7 +459,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"transactionId\":2,\n    \"status\":\"APPROVED\"\n}",
+							"raw": "{\n    \"transactionId\":6,\n    \"status\":\"APPROVED\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -504,7 +510,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"amount\":1300,\n    \"walletId\":1,\n    \"oppositePartyType\":\"PAYMENT\"\n}",
+							"raw": "{\n    \"amount\":3000,\n    \"walletId\":4,\n    \"oppositePartyType\":\"IBAN\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -522,6 +528,112 @@
 								"v1",
 								"transactions",
 								"withdraw"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin Search Transactions",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin123",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "customerId",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/v1/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"v1",
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "transactionType",
+									"value": "WITHDRAW",
+									"disabled": true
+								},
+								{
+									"key": "oppositePartyStatus",
+									"value": "APPROVED",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin Search Wallets",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin123",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "customerId",
+								"value": "1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/v1/wallets",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"v1",
+								"wallets"
+							],
+							"query": [
+								{
+									"key": "minAmount",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "maxAmount",
+									"value": "1000",
+									"disabled": true
+								}
 							]
 						}
 					},

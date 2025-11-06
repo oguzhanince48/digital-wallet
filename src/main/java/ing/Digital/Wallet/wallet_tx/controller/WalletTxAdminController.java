@@ -1,6 +1,5 @@
 package ing.Digital.Wallet.wallet_tx.controller;
 
-import ing.Digital.Wallet.common.model.CustomUserDetails;
 import ing.Digital.Wallet.common.rest.BaseController;
 import ing.Digital.Wallet.wallet.controller.response.model.DataResponse;
 import ing.Digital.Wallet.wallet.controller.response.model.Response;
@@ -16,10 +15,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,17 +27,16 @@ import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/v1/transactions")
+@RequestMapping("/api/admin/v1/transactions")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('CUSTOMER')")
-public class WalletTxController extends BaseController {
+@PreAuthorize("hasRole('ADMIN')")
+public class WalletTxAdminController extends BaseController {
 
     private final WalletTxFacade walletTxFacade;
 
     @GetMapping
-    public Response<DataResponse<WalletTxSearchResponse>> search(@AuthenticationPrincipal CustomUserDetails userDetails, @Valid WalletTxSearchRequest walletTxSearchRequest) {
-        Long customerId = userDetails.getCustomerId();
-        log.info("Wallet Transaction Search Request: {}, customerId: {}", walletTxSearchRequest.toString(), customerId);
+    public Response<DataResponse<WalletTxSearchResponse>> search(@RequestHeader("customerId") Long customerId, @Valid WalletTxSearchRequest walletTxSearchRequest) {
+        log.info("Wallet Transaction By Admin, Search Request: {}, customerId: {}", walletTxSearchRequest.toString(), customerId);
         WalletTxSearchResult walletTxSearchResult = walletTxFacade.search(walletTxSearchRequest.toModel(customerId));
         List<WalletTxSearchResponse> walletTxSearchResponseList = walletTxSearchResult.getWalletTxList().stream()
                 .map(WalletTxSearchResponse::fromModel)
@@ -47,28 +45,23 @@ public class WalletTxController extends BaseController {
     }
 
     @PostMapping("/deposit")
-    public Response<WalletTx> deposit(@AuthenticationPrincipal CustomUserDetails userDetails, @Valid @RequestBody WalletDepositRequest walletDepositRequest) {
-        Long customerId = userDetails.getCustomerId();
-        log.info("Wallet Deposit Request: {}, customerId: {}", walletDepositRequest.toString(), customerId);
+    public Response<WalletTx> deposit(@RequestHeader("customerId") Long customerId, @Valid @RequestBody WalletDepositRequest walletDepositRequest) {
+        log.info("Wallet Deposit By Admin, Request: {}, customerId: {}", walletDepositRequest.toString(), customerId);
         WalletTx walletTx = walletTxFacade.deposit(walletDepositRequest.toModel(customerId));
         return respond(walletTx);
     }
 
     @PostMapping("/withdraw")
-    public Response<WalletTx> withdraw(@AuthenticationPrincipal CustomUserDetails userDetails, @Valid @RequestBody WalletWithdrawRequest walletWithdrawRequest) {
-        Long customerId = userDetails.getCustomerId();
-        log.info("Wallet Withdraw Request: {}, customerId: {}", walletWithdrawRequest.toString(), customerId);
+    public Response<WalletTx> withdraw(@RequestHeader("customerId") Long customerId, @Valid @RequestBody WalletWithdrawRequest walletWithdrawRequest) {
+        log.info("Wallet Withdraw By Admin, Request: {}, customerId: {}", walletWithdrawRequest.toString(), customerId);
         WalletTx walletTx = walletTxFacade.withdraw(walletWithdrawRequest.toModel(customerId));
         return respond(walletTx);
     }
 
     @PostMapping("/approve")
-    public Response<WalletTx> approve(@AuthenticationPrincipal CustomUserDetails userDetails, @Valid @RequestBody WalletTxApprovalRequest walletTxApprovalRequest) {
-        Long customerId = userDetails.getCustomerId();
-        log.info("Wallet Approval Request: {}, customerId: {}", walletTxApprovalRequest.toString(), customerId);
+    public Response<WalletTx> approve(@RequestHeader("customerId") Long customerId, @Valid @RequestBody WalletTxApprovalRequest walletTxApprovalRequest) {
+        log.info("Wallet Approval By Admin, Request: {}, customerId: {}", walletTxApprovalRequest.toString(), customerId);
         WalletTx walletTx = walletTxFacade.processApproval(walletTxApprovalRequest.toModel(customerId));
         return respond(walletTx);
     }
-
-
 }

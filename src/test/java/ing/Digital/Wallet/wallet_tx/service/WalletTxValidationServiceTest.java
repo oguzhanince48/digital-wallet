@@ -19,7 +19,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -54,7 +56,7 @@ class WalletTxValidationServiceTest {
 
         assertDoesNotThrow(() -> walletTxValidationService.validateDeposit(walletTransaction));
 
-        verify(walletJpaRepositoryAdapter).retrieve(2L, 2L);
+        verify(walletJpaRepositoryAdapter).retrieve(1L, 1L);
     }
 
     @Test

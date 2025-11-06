@@ -1,6 +1,5 @@
 package ing.Digital.Wallet.wallet.controller;
 
-import ing.Digital.Wallet.common.model.CustomUserDetails;
 import ing.Digital.Wallet.common.rest.BaseController;
 import ing.Digital.Wallet.wallet.controller.request.WalletCreateRequest;
 import ing.Digital.Wallet.wallet.controller.request.WalletSearchRequest;
@@ -14,10 +13,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,16 +25,15 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/wallets")
-@PreAuthorize("hasRole('CUSTOMER')")
-public class WalletController extends BaseController {
+@RequestMapping("/api/admin/v1/wallets")
+@PreAuthorize("hasRole('ADMIN')")
+public class WalletAdminController extends BaseController {
 
     private final WalletService walletService;
 
     @GetMapping
-    public Response<DataResponse<WalletResponse>> search(@AuthenticationPrincipal CustomUserDetails userDetails, @Valid WalletSearchRequest walletSearchRequest) {
-        Long customerId = userDetails.getCustomerId();
-        log.info("Wallet Search Request: {}, customerId: {}", walletSearchRequest.toString(), customerId);
+    public Response<DataResponse<WalletResponse>> search(@Valid WalletSearchRequest walletSearchRequest, @RequestHeader("customerId") Long customerId) {
+        log.info("Wallet Search By Admin, Request: {}, customerId: {}", walletSearchRequest.toString(), customerId);
         WalletSearchResult walletSearchResult = walletService.search(walletSearchRequest.toModel(customerId));
         List<WalletResponse> walletResponseList = walletSearchResult.getWallets()
                 .stream()
@@ -45,9 +43,8 @@ public class WalletController extends BaseController {
     }
 
     @PostMapping("/create")
-    public Response<WalletResponse> create(@AuthenticationPrincipal CustomUserDetails userDetails, @Valid @RequestBody WalletCreateRequest walletCreateRequest) {
-        Long customerId = userDetails.getCustomerId();
-        log.info("Wallet Create Request: {}, customerId: {}", walletCreateRequest.toString(), customerId);
+    public Response<WalletResponse> create(@Valid @RequestBody WalletCreateRequest walletCreateRequest, @RequestHeader("customerId") Long customerId) {
+        log.info("Wallet Create By Admin, Request: {}, customerId: {}", walletCreateRequest.toString(), customerId);
         Wallet wallet = walletService.create(walletCreateRequest.toModel(customerId));
         return respond(WalletResponse.fromModel(wallet));
     }

@@ -18,7 +18,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -69,7 +70,7 @@ class WalletServiceTest {
         assertThat(result.getWallets().getFirst().getBalance()).isEqualByComparingTo(BigDecimal.ZERO);
         assertThat(result.getWallets().getFirst().getCurrency().getCode()).isEqualTo(CurrencyCode.TRY.name());
         assertThat(result.getWallets().getFirst().getCustomer().getId()).isEqualTo(1L);
-        assertThat(result.getWallets().getFirst().getCustomer().getName()).isEqualTo("My Wallet");
+        assertThat(result.getWallets().getFirst().getWalletName()).isEqualTo("My Wallet");
     }
 
     @Test

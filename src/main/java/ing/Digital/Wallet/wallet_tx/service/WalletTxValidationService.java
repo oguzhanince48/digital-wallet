@@ -23,12 +23,12 @@ public class WalletTxValidationService {
     private final WalletTxJpaRepositoryAdapter walletTxJpaRepositoryAdapter;
 
     public void validateDeposit(WalletTransaction walletTransaction) {
-        Wallet wallet = retrieveWallet(walletTransaction.getWalletId(),walletTransaction.getWalletId());
+        Wallet wallet = retrieveWallet(walletTransaction.getWalletId(),walletTransaction.getCustomerId());
         validateDepositEnabled(wallet);
     }
 
     public void validateWithdraw(WalletTransaction walletTransaction) {
-        Wallet wallet = retrieveWallet(walletTransaction.getWalletId(),walletTransaction.getWalletId());
+        Wallet wallet = retrieveWallet(walletTransaction.getWalletId(),walletTransaction.getCustomerId());
         validateWithdrawEnabled(wallet);
         validateSufficientBalanceByTransactionType(wallet, walletTransaction.getAmount(),walletTransaction.getTransactionType());
     }

@@ -66,6 +66,7 @@ class WalletTxValidationServiceTest {
                 .walletId(2L)
                 .amount(BigDecimal.valueOf(500))
                 .transactionType(TransactionType.DEPOSIT)
+                .customerId(2L)
                 .build();
 
         Wallet wallet = Wallet.builder()
@@ -116,6 +117,7 @@ class WalletTxValidationServiceTest {
                 .walletId(2L)
                 .amount(BigDecimal.valueOf(500))
                 .transactionType(TransactionType.WITHDRAW)
+                .customerId(2L)
                 .build();
 
         Wallet wallet = Wallet.builder()
@@ -143,6 +145,7 @@ class WalletTxValidationServiceTest {
                 .walletId(2L)
                 .amount(BigDecimal.valueOf(500))
                 .transactionType(TransactionType.WITHDRAW)
+                .customerId(2L)
                 .build();
 
         Wallet wallet = Wallet.builder()
